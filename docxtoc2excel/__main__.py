@@ -7,16 +7,18 @@ import os
 
 sys.path.insert(0, os.getcwd())
 
-import src.fromdocx.toc_parser as toc_parser
-import src.toexcel.styles as styles
-import src.toexcel.match_apply as match_apply
+import docxtoc2excel.fromdocx.toc_parser as toc_parser
+import docxtoc2excel.toexcel.styles as styles
+import docxtoc2excel.toexcel.match_apply as match_apply
 
 
-parser = argparse.ArgumentParser(description='blabla')
+parser = argparse.ArgumentParser(description='''Imports table of content of
+                                                docx file and transports it
+                                                to xlsx file''')
 parser.add_argument('path_docx', type = str, default = None,
-                    help = 'Path to the word file.')
+                    help = 'Path to the word file')
 parser.add_argument('path_xlsx', type = str, default = None,
-                    help = 'Wanted path of generated xlsx file')
+                    help = 'Path of generated xlsx file')
 args = parser.parse_args()
 
 
