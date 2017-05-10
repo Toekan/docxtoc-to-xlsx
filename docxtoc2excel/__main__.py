@@ -1,9 +1,12 @@
-import argparse
 import docx
 import openpyxl as op
 
 import sys
 import os
+import re
+
+from tkinter import filedialog
+from tkinter import *
 
 sys.path.insert(0, os.getcwd())
 
@@ -12,18 +15,18 @@ import docxtoc2excel.toexcel.styles as styles
 import docxtoc2excel.toexcel.match_apply as match_apply
 
 
-parser = argparse.ArgumentParser(description='''Imports table of content of
-                                                docx file and transports it
-                                                to xlsx file''')
-parser.add_argument('path_docx', type = str, default = None,
-                    help = 'Path to the word file')
-parser.add_argument('path_xlsx', type = str, default = None,
-                    help = 'Path of generated xlsx file')
-args = parser.parse_args()
+# Open browse frame to choose docx file
+root = Tk()
+root.filename = filedialog.askopenfilename(initialdir="/", title="Select file",
+                                           filetypes=(("docx files", "*.docx"),
+                                                      ("all files", "*.*")))
+path_docx = root.filename
 
+# Excel file saved in same folder with same name
+path_excel = re.sub(r'.docx', r'.xlsx', path_docx)
 
-# load docx file
-doc = docx.Document(args.path_docx)
+# Load docx file
+doc = docx.Document(path_docx)
 
 # Create Excel sheet
 wb = op.Workbook()
@@ -41,7 +44,7 @@ for cell, title in zip(list(sheet.iter_rows('A1:K1'))[0], firstrow):
     cell.alignment = styles.alignment_titles
     cell.border = styles.thick_bottom_border
 
-# column and row dimensions
+# Column and row dimensions
 sheet.row_dimensions[1].height = 20
 sheet.column_dimensions['C'].width = 100
 sheet.column_dimensions['J'].width = 40
@@ -75,5 +78,5 @@ for excel_row in generator_through_sheet:
 
     counter += 1
 
-wb.save(args.path_xlsx)
+wb.save(path_excel)
 
