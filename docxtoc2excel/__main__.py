@@ -1,9 +1,7 @@
 import docx
 import openpyxl as op
 
-import sys
 import os
-import re
 
 from tkinter import filedialog
 from tkinter import *
@@ -22,6 +20,11 @@ root.filename = filedialog.askopenfilename(initialdir="/", title="Select file",
                                                       ("all files", "*.*")))
 path_docx = root.filename
 
+# Chosen content of the top row in excel, so the names of each column
+firstrow = ['art. Nr.', '', 'omschrijving', 'aantal', 'factor',
+            'lengte (y)', 'breedte (x)', 'hoogte (z)', 'hoeveelheid',
+            'EENHEIDSPRIJS', 'TOTAAL']
+
 # Excel file saved in same folder with same name
 path_excel = re.sub(r'.docx', r'.xlsx', path_docx)
 
@@ -31,11 +34,6 @@ doc = docx.Document(path_docx)
 # Create Excel sheet
 wb = op.Workbook()
 sheet = wb.get_sheet_by_name('Sheet')
-
-# Top row content
-firstrow = ['art. Nr.', '', 'omschrijving', 'aantal', 'factor',
-            'lengte (y)', 'breedte (x)', 'hoogte (z)', 'hoeveelheid',
-            'EENHEIDSPRIJS', 'TOTAAL']
 
 # Inserting top row with lay-out
 for cell, title in zip(list(sheet.iter_rows('A1:K1'))[0], firstrow):
